@@ -8,7 +8,7 @@
 # Project information
 #############################################################################
 
-PROJECT_NAME=blackjack
+PROJECT_NAME=blackjack.exe
 
 #############################################################################
 # Configuration variables

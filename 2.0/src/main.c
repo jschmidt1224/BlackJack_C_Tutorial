@@ -9,28 +9,27 @@ void printHands(int*, int*);
 int handSize(int*);
 int newCard();
 int handValue(int*);
+int handSize(struct Card*);
+struct Card newCard2();
+void shuffleDeck(struct Card *);
 
 int playerHand[HAND_SIZE], dealerHand[HAND_SIZE];
+struct Card deck[52];
 
 int main()
 {
-	struct Card deck[52];
 	int i;
 	srand(time(NULL));
 	for (i = 0; i < 52; i++) {
 		deck[i] = initCard(i);
 	}
 
-	for (i = 0; i < 52; i++) {
-		struct Card tmp = deck[i];
-		int shuffle = rand() % 52 + 1;
-		deck[i] = deck[shuffle];
-		deck[shuffle] = tmp;
-	}
+	shuffleDeck(deck);
 
 	for (i = 0; i < 52; i++) {
 		printf("%d, %d\n", deck[i].suit, deck[i].type);
 	}
+	return 0;
 }
 
 
@@ -129,6 +128,41 @@ int handSize(int *hand)
 		}
 	}
 	return HAND_SIZE;
+}
+
+int handSize(struct Card *hand)
+{
+	int i;
+	for (i = 0; i < HAND_SIZE; i++) {
+		if (hand[i].type == -1) {
+			return i;
+		}
+	}
+	return HAND_SIZE;
+}
+
+void shuffleDeck(struct Card *deck)
+{
+	int i;
+	for (i = 0; i < 52; i++) {
+		struct Card tmp = deck[i];
+		int shuffle = rand() % 52;
+		deck[i] = deck[shuffle];
+		deck[shuffle] = tmp;
+	}
+}
+
+struct Card newCard2() 
+{
+	static int current = 0;
+	if (current < 52) {
+		return deck[current++];
+	} else {
+		shuffleDeck(deck);
+		current = 0;
+		return deck[current++];
+	}
+
 }
 
 int newCard()

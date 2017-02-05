@@ -4,23 +4,26 @@
 #include "card.h"
 #include "utf8.h"
 
-#define HAND_SIZE 5
 
 #define clear() printf("\033[H\033[J")
 
 void printHands(struct Card*, struct Card*);
 int handValue(struct Card*);
-int handSize(struct Card*);
+
 struct Card newCard();
 void shuffleDeck(struct Card *);
+
 
 struct Card playerHand[HAND_SIZE], dealerHand[HAND_SIZE];
 struct Card deck[52];
 
-char spade[4], heart[4], club[4], diamond[4];
+
 
 int main()
 {
+	initSuits();
+	
+
 	int i, input, hand_size, cont = 1, playerValue, dealerValue;
 	srand(time(NULL));
 	for (i = 0; i < 52; i++) {
@@ -37,6 +40,8 @@ int main()
 		dealerHand[0] = newCard();
 		dealerHand[1] = newCard();
 		while (1) {
+			clear();
+			printf("\n");
 			printHands(playerHand, dealerHand);
 			printf("What would you like to do?\n");
 			printf("1) Hit\n");
@@ -55,11 +60,10 @@ int main()
 				}
 			} else if (input == 2) {
 				// Action for Stay
+				clear();
 				while(handValue(dealerHand) < 17 && (hand_size = handSize(dealerHand)) < HAND_SIZE) {
 					dealerHand[hand_size] = newCard();
-					printHands(playerHand, dealerHand);
 				}
-				printHands(playerHand, dealerHand);
 				playerValue = handValue(playerHand);
 				dealerValue = handValue(dealerHand);
 				if (dealerValue > 21) {
@@ -73,8 +77,20 @@ int main()
 				} else {
 					printf("Push!\n");
 				}
+				printHands(playerHand, dealerHand);
 				printf("\n\n\n\n");
+				printf("What would you like to do?\n");
+				printf("1) Continue\n");
+				printf("2) Quit\n");
+				if (scanf("%d", &input) <= 0) {
+					cont = 0;
+					break;
+				}
+				if (input != 1) {
+					cont = 0;
+				}
 				break;
+				
 			} else {
 				// Quit
 				cont = 0; 
@@ -97,10 +113,12 @@ int main()
 
 void printHands(struct Card *player, struct Card *dealer)
 {
-	clear();
-	int i = 0;
-	printf("Your hand: ");
-	for ( ; i<HAND_SIZE; i++) {
+	int i = 01;
+	printHand(player);
+	printf("\n\n");
+	printHand(dealer);
+	printf("\nYour hand: ");
+	for (i = 0; i<HAND_SIZE; i++) {
 		if (player[i].type != -1) {
 			printf("%d ", player[i].type);
 		}
@@ -114,16 +132,7 @@ void printHands(struct Card *player, struct Card *dealer)
 	printf(": %d\n", handValue(dealer));
 }
 
-int handSize(struct Card *hand)
-{
-	int i;
-	for (i = 0; i < HAND_SIZE; i++) {
-		if (hand[i].type == -1) {
-			return i;
-		}
-	}
-	return HAND_SIZE;
-}
+
 
 void shuffleDeck(struct Card *deck)
 {
@@ -143,7 +152,6 @@ struct Card newCard()
 		return deck[current++];
 	} else {
 		shuffleDeck(deck);
-		printf("NEW DECK!!\n\n\n\n\n\n\n\n\n\n\n");
 		current = 0;
 		return deck[current++];
 	}
@@ -158,3 +166,4 @@ int handValue(struct Card *hand)
 	}
 	return sum;
 }
+

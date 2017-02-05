@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "card.h"
+#include "utf8.h"
 
 #define HAND_SIZE 5
 
@@ -15,6 +16,8 @@ void shuffleDeck(struct Card *);
 
 struct Card playerHand[HAND_SIZE], dealerHand[HAND_SIZE];
 struct Card deck[52];
+
+char spade[4], heart[4], club[4], diamond[4];
 
 int main()
 {
@@ -83,6 +86,14 @@ int main()
 	printf("Quitting...\n");
 	return 0;
 }
+
+//void printHands(struct Card *player, struct Card *dealer, int showDealer)
+//{/
+//	clear();/
+//	int i = 0, plen = handSize(player), dlen = handSize(dealer);
+//	printf("\n");
+//	printf("\E2\99\A0");
+//}
 
 void printHands(struct Card *player, struct Card *dealer)
 {

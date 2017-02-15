@@ -66,6 +66,8 @@ int main()
 				}
 				playerValue = handValue(playerHand);
 				dealerValue = handValue(dealerHand);
+				printf("\n");
+				printHands(playerHand, dealerHand);
 				if (dealerValue > 21) {
 					printf("Dealer Bust: You Win!\n");
 				} else if (playerValue > 21) {
@@ -77,7 +79,6 @@ int main()
 				} else {
 					printf("Push!\n");
 				}
-				printHands(playerHand, dealerHand);
 				printf("\n\n\n\n");
 				printf("What would you like to do?\n");
 				printf("1) Continue\n");
@@ -113,10 +114,12 @@ int main()
 
 void printHands(struct Card *player, struct Card *dealer)
 {
-	int i = 01;
+	//printf("\n");
 	printHand(player);
 	printf("\n\n");
 	printHand(dealer);
+	printf("\n\n");
+	/*
 	printf("\nYour hand: ");
 	for (i = 0; i<HAND_SIZE; i++) {
 		if (player[i].type != -1) {
@@ -130,6 +133,7 @@ void printHands(struct Card *player, struct Card *dealer)
 		}
 	}
 	printf(": %d\n", handValue(dealer));
+	*/
 }
 
 
@@ -160,9 +164,16 @@ struct Card newCard()
 
 int handValue(struct Card *hand)
 {
-	int i = 0, sum = 0;
+	int i = 0, sum = 0, aceCount = 0;
 	while (hand[i].type != -1 && i < HAND_SIZE) {
+		if (hand[i].value == 1) {
+			aceCount += 1;
+		}
 		sum += hand[i++].value;
+	}
+	while (sum < 12 && aceCount > 0) {
+		sum += 10;
+		aceCount -= 1;
 	}
 	return sum;
 }

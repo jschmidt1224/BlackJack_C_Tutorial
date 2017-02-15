@@ -83,13 +83,13 @@ void printHands(int *player, int *dealer)
 			printf("%d ", player[i]);
 		}
 	}
-	printf("\nDealers hand: ");
+	printf(":  %d\nDealers hand: ", handValue(player));
 	for (i = 0; i<HAND_SIZE; i++) {
 		if (dealer[i] != -1) {
 			printf("%d ", dealer[i]);
 		}
 	}
-	printf("\n");
+	printf(":   %d\n", handValue(dealer));
 }
 
 int handSize(int *hand)
@@ -108,11 +108,30 @@ int newCard()
 	return rand() % 10 + 1;
 }
 
+
+
+
 int handValue(int *hand)
 {
-	int i = 0, sum = 0;
+	int i = 0, sum = 0, aceCount = 0;
 	while (hand[i] != -1) {
+		if (hand[i] == 1) {
+			aceCount += 1;
+		}
 		sum += hand[i++];
+	}
+	while (sum < 12 && aceCount > 0) {
+		sum += 10;
+		aceCount -= 1;
 	}
 	return sum;
 }
+
+
+
+
+
+
+
+
+

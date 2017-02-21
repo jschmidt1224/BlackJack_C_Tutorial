@@ -1,9 +1,9 @@
 #include "card.h"
 #include "utf8.h"
 #include <stdio.h>
+#include <ncursesw/ncurses.h>
 
-
-char prints[13][3] = {"A","2","3","4","5","6","7","8","9","10","J","Q","K"};
+char prints[13] = {'A','2','3','4','5','6','7','8','9','T','J','Q','K'};
 char suits[4][4];
 char lr[4], ud[4], rd[4], ru[4], ld[4], lu[4]; 
 
@@ -94,7 +94,31 @@ void botText(struct Card card)
 	cardGap();
 }
 
-void printHand(struct Card *hand)
+void printHand(struct Card *hand, int y)
+{
+    int i, len = handSize(hand);
+    int height = 9;
+    int width = 13;
+
+    for (i = 0; i < len; i++) {
+        WINDOW *card;
+        card = newwin(height, width, 3 + 11 * y, 5 + i * 16);
+        if (has_colors()) {
+            init_pair(1, COLOR_BLACK, COLOR_WHITE);
+        }
+        wbkgd(card, COLOR_PAIR(1));
+        box(card, 0, 0);
+        if (hand[i].suit == 2 || hand[i].suit == 3) {
+            init_pair(2, COLOR_RED, COLOR_WHITE);
+            wattron(card, COLOR_PAIR(2));
+        }
+        mvwaddch(card, 1, 1, prints[hand[i].type - 1] | A_BOLD);
+        mvwprintw(card, 4, 6, "%s", suits[hand[i].suit]);
+        mvwaddch(card, 7, 11, prints[hand[i].type - 1] | A_BOLD);
+        wrefresh(card);
+    }
+}
+/*void printHand(struct Card *hand)
 {
 	int len = handSize(hand), i;
 	for (i = 0; i < len; i++) {
@@ -132,4 +156,4 @@ void printHand(struct Card *hand)
 	for (i = 0; i < len; i++) {
 		bot();
 	}
-}
+}*/

@@ -31,7 +31,7 @@ AUTODEP_FILES = $(OBJS:%.o=%.d)
 CPPFLAGS = -Wall -W -Wextra 
 CPPFLAGS += -I$(INCLUDE_DIR) -g
 
-LDFLAGS = -lcurses
+LDFLAGS = -lncursesw
 
 #############################################################################
 # Toolchain

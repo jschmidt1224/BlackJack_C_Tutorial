@@ -10,7 +10,7 @@ struct Card {
 	int suit;
 };
 
-extern char prints[13][3];
+extern char prints[13];
 extern char suits[4][4];
 
 struct Card initCard(int);
@@ -25,7 +25,7 @@ void mid();
 void midText(struct Card);
 void bot();
 void botText(struct Card);
-void printHand(struct Card *);
+void printHand(struct Card *, int y);
 
 
 

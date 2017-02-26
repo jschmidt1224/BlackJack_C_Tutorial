@@ -4,7 +4,7 @@
 
 #define HAND_SIZE 5
 
-void printHands(int*, int*);
+void printHands(int*, int*, int);
 int handSize(int*);
 int newCard();
 int handValue(int*);
@@ -15,7 +15,9 @@ int playerSize, dealerSize;
 int main()
 {
 	int i, input, cont = 1, newGame = 0, playerValue, dealerValue;
-	srand(time(NULL));
+	char buf[1024];
+
+    srand(time(NULL));
 	while (cont) {
 		for (i = 0; i < HAND_SIZE; i++) {
 			playerHand[i] = -1;
@@ -28,15 +30,19 @@ int main()
         playerSize = dealerSize = 2;
         newGame = 0;
 		while (!newGame) {
-			printHands(playerHand, dealerHand);
+			printHands(playerHand, dealerHand, 1);
 			printf("What would you like to do?\n");
 			printf("1) Hit\n");
 			printf("2) Stay\n");
-			printf("*) Quit\n");
+			printf("3) Quit\n");
 			if (scanf("%d", &input) <= 0) {
-				cont = 0;
-				break;
+                scanf("%1023s", buf);
+                input = -1;
 			}
+            if (input > 3 || input < 1) {
+                printf("Please enter a valid option\n");
+                continue;
+            }
             switch (input) {
 			case 1: 
 				// Actions for Hit
@@ -51,7 +57,7 @@ int main()
 				while(handValue(dealerHand) < 17 && dealerSize < HAND_SIZE) {
 					dealerHand[dealerSize++] = newCard();
 				}
-				printHands(playerHand, dealerHand);
+				printHands(playerHand, dealerHand, 0);
 				playerValue = handValue(playerHand);
 				dealerValue = handValue(dealerHand);
 				if (dealerValue > 21) {
@@ -65,7 +71,7 @@ int main()
 				} else {
 					printf("Push!\n");
 				}
-				printf("\n\n\n\n");
+				printf("\n\n");
                 newGame = 1;
 				break;
             default:
@@ -75,28 +81,31 @@ int main()
 				break;
 			}
 		}
-
 	}
 	printf("Quitting...\n");
 	return 0;
 }
 
-void printHands(int *player, int *dealer)
+void printHands(int *player, int *dealer, int hide)
 {
 	int i = 0;
-	printf("Your hand:\t");
+	printf("Your hand:    ");
 	for ( ; i < HAND_SIZE; i++) {
 		if (player[i] != -1) {
-			printf("%d ", player[i]);
+			printf("%-2d ", player[i]);
 		}
 	}
-	printf(":\t%d\nDealers hand:\t", handValue(player));
+	printf("\nDealers hand: ");
 	for (i = 0; i<HAND_SIZE; i++) {
 		if (dealer[i] != -1) {
-			printf("%d ", dealer[i]);
+            if (hide && i == 0) {
+                printf("** ");
+            } else {
+			    printf("%-2d ", dealer[i]);
+            }
 		}
 	}
-	printf(":\t%d\n", handValue(dealer));
+    printf("\n");
 }
 
 int newCard()
@@ -119,12 +128,5 @@ int handValue(int *hand)
 	}
 	return sum;
 }
-
-
-
-
-
-
-
 
 

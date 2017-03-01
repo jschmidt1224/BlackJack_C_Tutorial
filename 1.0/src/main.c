@@ -8,77 +8,59 @@ void printHands(int*, int*, int);
 int handSize(int*);
 int newCard();
 int handValue(int*);
+void reset_game(int*, int*, int*, int*);
+int get_input();
 
 int playerHand[HAND_SIZE], dealerHand[HAND_SIZE];
 int playerSize, dealerSize;
 
 int main()
 {
-    int i, input, cont = 1, newGame = 0, playerValue, dealerValue;
-    char buf[1024];
+    int input, cont = 1, newGame = 0, playerValue, dealerValue;
 
     srand(time(NULL));
     while (cont) {
-        for (i = 0; i < HAND_SIZE; i++) {
-            playerHand[i] = -1;
-            dealerHand[i] = -1;
-        }
-        playerHand[0] = newCard();
-        playerHand[1] = newCard();
-        dealerHand[0] = newCard();
-        dealerHand[1] = newCard();
-        playerSize = dealerSize = 2;
+        reset_game(playerHand, dealerHand, &playerSize, &dealerSize);
         newGame = 0;
         while (!newGame) {
             printHands(playerHand, dealerHand, 1);
-            printf("What would you like to do?\n");
-            printf("1) Hit\n");
-            printf("2) Stay\n");
-            printf("3) Quit\n");
-            if (scanf("%d", &input) <= 0) {
-                scanf("%1023s", buf);
-                input = -1;
-            }
-            if (input > 3 || input < 1) {
-                printf("Please enter a valid option\n");
-                continue;
-            }
+            input = get_input();
             switch (input) {
-            case 1: 
-                // Actions for Hit
-                if (playerSize < HAND_SIZE) {
-                    playerHand[playerSize++] = newCard();
-                    if (handValue(playerHand) < 21 && playerSize < HAND_SIZE) {
-                        break;
+                case 1: 
+                    // Actions for Hit
+                    if (playerSize < HAND_SIZE) {
+                        playerHand[playerSize++] = newCard();
+                        if (handValue(playerHand) < 21 && playerSize < HAND_SIZE) {
+                            break;
+                        }
                     }
-                }
-            case 2:
-                // Action for Stay
-                while(handValue(dealerHand) < 17 && dealerSize < HAND_SIZE) {
-                    dealerHand[dealerSize++] = newCard();
-                }
-                printHands(playerHand, dealerHand, 0);
-                playerValue = handValue(playerHand);
-                dealerValue = handValue(dealerHand);
-                if (dealerValue > 21) {
-                    printf("Dealer Bust: You Win!\n");
-                } else if (playerValue > 21) {
-                    printf("Bust: You lose :(\n");
-                } else if (playerValue > dealerValue) {
-                    printf("You Win!\n");
-                } else if (playerValue < dealerValue) {
-                    printf("You lose :(\n");
-                } else {
-                    printf("Push!\n");
-                }
-                printf("\n\n");
-                newGame = 1;
-                break;
-            default:
-                // Quit
-                newGame = 1;
-                cont = 0; 
-                break;
+                case 2:
+                    // Action for Stay
+                    while(handValue(dealerHand) < 17 && dealerSize < HAND_SIZE) {
+                        dealerHand[dealerSize++] = newCard();
+                    }
+                    printHands(playerHand, dealerHand, 0);
+                    playerValue = handValue(playerHand);
+                    dealerValue = handValue(dealerHand);
+                    if (playerValue > 21) {
+                        printf("Bust: You Lose :(\n");
+                    } else if (dealerValue > 21) {
+                        printf("Dealer Bust: You win!\n");
+                    } else if (playerValue > dealerValue) {
+                        printf("You Win!\n");
+                    } else if (playerValue < dealerValue) {
+                        printf("You lose :(\n");
+                    } else {
+                        printf("Push!\n");
+                    }
+                    printf("\n\n");
+                    newGame = 1;
+                    break;
+                default:
+                    // Quit
+                    newGame = 1;
+                    cont = 0; 
+                    break;
             }
         }
     }
@@ -128,5 +110,40 @@ int handValue(int *hand)
     }
     return sum;
 }
+
+void reset_game(int *pHand, int *dHand, int *pSize, int *dSize)
+{
+    int i;
+    for (i = 0; i < HAND_SIZE; i++) {
+        pHand[i] = -1;
+        dHand[i] = -1;
+    }
+    pHand[0] = newCard();
+    pHand[1] = newCard();
+    dHand[0] = newCard();
+    dHand[1] = newCard();
+    *pSize = *dSize = 2;
+}
+
+int get_input()
+{
+    int input = -1;
+    char buf[1024];
+    printf("What would you like to do?\n");
+    printf("1) Hit\n");
+    printf("2) Stay\n");
+    printf("3) Quit\n");
+    while (1) {
+        if (scanf("%d", &input) <= 0) {
+            scanf("%1023s", buf);
+            input = -1;           
+        } else if (input >= 1 && input <= 3) {
+            break;
+        }
+        printf("Please enter a valid option\n");
+    }    
+    return input;
+}
+
 
 

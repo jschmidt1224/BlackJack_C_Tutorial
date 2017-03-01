@@ -100,13 +100,12 @@ int handValue(int *hand)
     int i = 0, sum = 0, aceCount = 0;
     while (hand[i] != -1 && i < HAND_SIZE) {
         if (hand[i] == 1) {
-            aceCount += 1;
+            aceCount = 1;
         }
         sum += hand[i++];
     }
-    while (sum < 12 && aceCount > 0) {
+    if (sum < 12 && aceCount == 1) {
         sum += 10;
-        aceCount -= 1;
     }
     return sum;
 }

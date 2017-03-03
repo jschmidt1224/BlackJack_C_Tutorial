@@ -5,11 +5,10 @@
 #define HAND_SIZE 5
 
 void printHands(int*, int*, int);
-int handSize(int*);
-int newCard();
 int handValue(int*);
 void reset_game(int*, int*, int*, int*);
 int get_input();
+int newCard();
 
 int playerHand[HAND_SIZE], dealerHand[HAND_SIZE];
 int playerSize, dealerSize;
@@ -17,7 +16,6 @@ int playerSize, dealerSize;
 int main()
 {
     int input, cont = 1, newGame = 0, playerValue, dealerValue;
-
     srand(time(NULL));
     while (cont) {
         reset_game(playerHand, dealerHand, &playerSize, &dealerSize);
@@ -26,7 +24,7 @@ int main()
             printHands(playerHand, dealerHand, 1);
             input = get_input();
             switch (input) {
-                case 1: 
+                case 1:
                     // Actions for Hit
                     if (playerSize < HAND_SIZE) {
                         playerHand[playerSize++] = newCard();
@@ -59,7 +57,7 @@ int main()
                 default:
                     // Quit
                     newGame = 1;
-                    cont = 0; 
+                    cont = 0;
                     break;
             }
         }
@@ -100,13 +98,12 @@ int handValue(int *hand)
     int i = 0, sum = 0, aceCount = 0;
     while (hand[i] != -1 && i < HAND_SIZE) {
         if (hand[i] == 1) {
-            aceCount += 1;
+            aceCount = 1;
         }
         sum += hand[i++];
     }
-    while (sum < 12 && aceCount > 0) {
+    while (sum < 12 && aceCount) {
         sum += 10;
-        aceCount -= 1;
     }
     return sum;
 }

@@ -7,4 +7,4 @@ subdirs:
 
 .PHONY: clean
 clean:
-	@for dir in $(SUBDIRS); do echo [CLEAN] $$dir; make --no-print-directory -C $$dir clean; done
+	@for dir in $(SUBDIRS); do echo [MAKE] $$dir; make --no-print-directory -C $$dir clean; done

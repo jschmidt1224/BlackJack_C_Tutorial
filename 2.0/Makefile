@@ -54,7 +54,7 @@ $(PROJECT_NAME): $(OBJS)
 clean:
 	@echo [CLEAN]
 	@rm -rf $(OUTPUT_DIR)
-	@rm $(PROJECT_NAME)
+	@rm -f $(PROJECT_NAME)
 
 -include $(AUTODEP_FILES)
 
